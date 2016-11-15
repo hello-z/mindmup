@@ -1,0 +1,131 @@
+Custom CSS Styling
+
+Custom Styling using CSS is was an experimental feature of MindMup 1 -- it is not supported in MindMup 2 and will not be supported in the future. We plan to implement configurable map themes instead. Join the MindMup2 Google Discussion Group to get notified when we start working on this feature, and influence how we do it 
+
+
+MindMup 1.0 supports styling nodes using CSS. To use custom styles, activate the new drawing engine, and then select Custom Style from the edit menu. This will open a popup dialog where you can enter any CSS and change most of the visual aspects of your mind map.
+Using this feature at the moment requires a good familiarity with CSS. If you don't know what CSS is, it's probably not a good idea to play with this feature while it is in an experimental phase. We will build on this foundation to enable non-technical users to benefit from custom styling later.
+
+With the new drawing engine, each node and connector is a DOM object you can style. You can change default sizes, backgrounds, fonts, shadows and almost anything else.
+
+Here are some nice examples of what you can do now:
+
+Make the first few levels of map larger and rounder
+
+.mapjs-node[mapjs-level="1"]{
+  border-radius: 60px;
+  font-size: 30px;
+}
+.mapjs-node[mapjs-level="2"]{
+  border-radius: 30px;
+  font-size: 20px;
+}
+.mapjs-node[mapjs-level="3"]{
+  border-radius: 20px;
+  font-size: 15px;
+}
+
+Create a spartan map, with simple styling, to fit more content on a screen
+
+.mapjs-node{
+  border: none !important;
+  font-size: 12px;
+  box-shadow: none !important;
+  margin: 0;
+  background: white !important;
+  padding: 2px;
+  font-weight:normal;
+}
+.mapjs-node.selected {
+  font-weight:bold;
+}
+.mapjs-node.activated {
+  font-weight:bold;
+}
+
+Change default background images and borders to make the map look like crumbled paper
+
+.mapjs-node
+{
+    padding: 10px;
+    font-size: 20px;
+    font-family: Times;
+    background-color: none !important;
+    background: url(http://.....) repeat;
+    color: black;
+    border: 1px solid black;
+}
+
+.mapjs-node.selected, .mapjs-node.activated
+{
+    border: 1px solid black;
+}
+.mapjs-node[mapjs-level="1"]
+{
+    padding: 15px;
+    font-size:30px;
+}
+#container 
+{
+    background: url(http://.....) repeat
+}
+
+Assign colors and font sizes automatically based on levels
+
+.mapjs-node[mapjs-level="1"] 
+{
+    background-color: green;
+    color:white;
+    font-size:20px;
+}
+.mapjs-node[mapjs-level="2"] 
+{
+    background-color: yellow;
+    font-size:15px;
+    color:black;
+}
+.mapjs-node[mapjs-level="3"] 
+{
+    background-color: red;
+    color:white;
+}
+
+Supported selectors
+
+You can use these CSS selectors:
+
+  .mapjs-node will match all map nodes
+    you can additionally use the [mapjs-level] attribute selector to match only a particular level of the map. For example, .mapjs-node[mapjs-level="2"] matches all second level nodes (children of the root node)
+   
+   The nodes get additional classes based on their background color, which is useful if you want to change the default font color
+  .mapjs-node-light will match nodes with a light background - 
+  .mapjs-node-dark will match nodes with a dark background
+  .mapjs-node-white will match nodes with a very light (almost white and white) backgrounds
+  
+  the nodes have several additional classes that change depending on their state
+  .selected will match the currently selected (focused) node
+  .activated will match all the activated nodes in case of multiple selection (using shift+arrows or shift+click)
+  .collapsed will match parent nodes that are collapsed, showing as a deck of nodes by default
+  .dragging will match the node being dragged
+  .droppable will match a node under the one being dragged, while dragging
+  
+  the nodes have three potential sub-items you can also modify
+  .mapjs-node span will match the text inside the nodes - use this to change the default node size, word wrapping, text styling 
+  .mapjs-node a.mapjs-hyperlink will match an optional hyperlink within the node - you can use this to set a different hyperlink icon, for example
+  .mapjs-node a.mapjs-attachment will match an optional attachment paperclip - use this to change the paperclip icon
+  .mapjs-connector will match the connecting lines between parents and children. Note that this is a SVG element so it uses SVG CSS properties
+  .mapjs-link will match the custom connectors between non-related nodes. Note that this is a SVG element so it uses SVG CSS properties
+  #container will match the whole map background
+  
+  each node has a DOM ID that does not change even when the text changes, so you can inspect the DOM and match a particular ID (eg #node_1) to change fonts, sizes or backgrounds for just one node of a map
+  Some important considerations
+
+The style is stored with the map, which means:
+embedded maps will keep the custom styling
+all collaborators in a collaborative session will see the new styling as soon as you change it (assuming they have all turned on the new drawing engine)
+if you load a different map, or create a new map, the styling changes back to default. you can copy and paste styles between maps, but you cannot set a general default style for all your maps at the moment
+At the moment, custom CSS styles are not supported for PDF and PNG exports - and playing with box sizes is likely to cause problems with exported maps. We're working on this and the exported maps should be using the new styles soon. Meanwhile, it will probably be useful to remove any custom styling temporarily and make sure the map still looks OK on the screen before exporting a map.
+
+If you use custom styles inside a collaborative map, all collaborators have to be using the new drawing engine otherwise the layout might be significantly different to various people.
+
+If you mess things up while playing with the styles, just open the dialog again and remove all the styles from it, press Save, and the map will revert back to the original setting.
